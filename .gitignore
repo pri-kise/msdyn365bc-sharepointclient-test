@@ -1,0 +1,14 @@
+# --- AL gitignore ---
+#All files with following extension
+*.app
+*.zip
+*.g.xlf
+ 
+#All files that are named the following
+rad.json
+launch.json
+permissionsAnalyzer.json
+ 
+#All files from directories
+**/.alcache/*
+**/.altemplates/*
