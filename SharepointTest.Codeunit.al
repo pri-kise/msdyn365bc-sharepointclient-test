@@ -132,11 +132,10 @@ codeunit 50100 "PTE Sharepoint Test"
         ClientCredentialsTokenAuthorityUrlTxt: Label 'https://login.microsoftonline.com/%1/oauth2/v2.0/token', Comment = '%1 = AAD tenant ID', Locked = true;
         IsSuccess: Boolean;
         AuthorityUrl: Text;
-        IdToken: Text;
     begin
         AuthorityUrl := StrSubstNo(ClientCredentialsTokenAuthorityUrlTxt, AadTenantId);
         ClearLastError();
-        if (not OAuth2.AcquireTokensFromCache(ClientId, ClientSecret, '', AuthorityUrl, Scopes, AccessToken, IdToken)) or (AccessToken.IsEmpty()) then
+        if (not OAuth2.AcquireAuthorizationCodeTokenFromCache(ClientId, ClientSecret, AuthorityUrl, '', Scopes, AccessToken)) or (AccessToken.IsEmpty()) then
             OAuth2.AcquireTokenWithClientCredentials(ClientId, ClientSecret, AuthorityUrl, '', Scopes, AccessToken);
 
         IsSuccess := not AccessToken.IsEmpty();
@@ -152,8 +151,8 @@ codeunit 50100 "PTE Sharepoint Test"
 
     local procedure GetScopes() Scopes: List of [Text]
     begin
-        // Scopes.Add('00000003-0000-0ff1-ce00-000000000000/.default'); //guid is the Application Id for Office 365 SharePoint Online
-        Scopes.Add('https://microsoft.sharepoint.com/.default');
+        Scopes.Add('00000003-0000-0ff1-ce00-000000000000/.default'); //guid is the Application Id for Office 365 SharePoint Online
+        // Scopes.Add('https://microsoft.sharepoint.com/.default');
         // Scopes.Add('https://graph.microsoft.com/.default');
     end;
 
