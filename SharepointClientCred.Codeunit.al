@@ -47,8 +47,8 @@ codeunit 50101 "PTE SharepointClientCred." implements "SharePoint Authorization"
         OAuth2: Codeunit System.Security.Authentication.OAuth2;
         FailedErr: Label 'Failed to retrieve an access token.';
         //TODO: Check Authority Url
-        ClientCredentialsTokenAuthorityUrlTxt: Label 'https://login.microsoftonline.com/%1/oauth2/v2.0/token', Comment = '%1 = AAD tenant ID', Locked = true;
-        // ClientCredentialsTokenAuthorityUrlTxt: Label 'https://login.microsoftonline.com/%1/oauth2/v2.0/authorize', Comment = '%1 = AAD tenant ID', Locked = true;
+        // ClientCredentialsTokenAuthorityUrlTxt: Label 'https://login.microsoftonline.com/%1/oauth2/v2.0/token', Comment = '%1 = AAD tenant ID', Locked = true;
+        ClientCredentialsTokenAuthorityUrlTxt: Label 'https://login.microsoftonline.com/%1/oauth2/v2.0/authorize', Comment = '%1 = AAD tenant ID', Locked = true;
         IsSuccess: Boolean;
         AuthorityUrl: Text;
         IdToken: Text;
