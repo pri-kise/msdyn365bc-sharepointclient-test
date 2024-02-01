@@ -37,6 +37,14 @@ page 50100 "PTE Sharepoint Setup"
                     ToolTip = 'Specifies the Password.';
                 }
             }
+            group("ClientId and ClientSecret")
+            {
+
+                field("Client Secret"; Rec."Client Secret")
+                {
+                    ToolTip = 'Specifies the Client Secret.';
+                }
+            }
         }
     }
     actions
@@ -94,6 +102,17 @@ page 50100 "PTE Sharepoint Setup"
                     PTESharepointTest.TestSharepointWithoutPassword();
                 end;
             }
+            action(TestClientSecret)
+            {
+                ApplicationArea = All;
+
+                trigger OnAction()
+                var
+                    PTESharepointTest: Codeunit "PTE Sharepoint Test";
+                begin
+                    PTESharepointTest.TestClientIdWithClientSecretOAuth();
+                end;
+            }
         }
         area(Promoted)
         {
@@ -104,6 +123,8 @@ page 50100 "PTE Sharepoint Setup"
             actionref(TestSharepoint_Promoted; TestSharepoint)
             { }
             actionref(TestSharepointWithoutPassword_Promoted; TestSharepointWithoutPassword)
+            { }
+            actionref(TestClientSecret_Promoted; TestClientSecret)
             { }
         }
     }

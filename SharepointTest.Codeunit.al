@@ -105,10 +105,56 @@ codeunit 50100 "PTE Sharepoint Test"
         exit(Format(GuidToFormat, 0, 4));
     end;
 
+    procedure TestClientIdWithClientSecretOAuth()
+    var
+        SharepointSetup: Record "PTE Sharepoint Setup";
+        OAuth2: Codeunit OAuth2;
+    begin
+        SharepointSetup.Get();
+        GetToken(FormatGuid(SharepointSetup.TenantId), FormatGuid(SharepointSetup.ClientId), SharepointSetup.GetClientSecret(), GetScopes());
+    end;
+
+    local procedure GetToken(AadTenantId: Text; ClientId: Text; ClientSecret: SecretText; Scopes: List of [Text]): SecretText
+    var
+        ErrorText: Text;
+        AccessToken: SecretText;
+    begin
+        if not AcquireToken(AadTenantId, ClientId, ClientSecret, Scopes, AccessToken, ErrorText) then
+            Error(ErrorText);
+        exit(AccessToken);
+    end;
+
+    local procedure AcquireToken(AadTenantId: Text; ClientId: Text; ClientSecret: SecretText; Scopes: List of [Text]; var AccessToken: SecretText; var ErrorText: Text): Boolean
+    var
+        OAuth2: Codeunit System.Security.Authentication.OAuth2;
+        FailedErr: Label 'Failed to retrieve an access token.';
+        //TODO: Check Authority Url
+        ClientCredentialsTokenAuthorityUrlTxt: Label 'https://login.microsoftonline.com/%1/oauth2/v2.0/token', Comment = '%1 = AAD tenant ID', Locked = true;
+        IsSuccess: Boolean;
+        AuthorityUrl: Text;
+        IdToken: Text;
+    begin
+        AuthorityUrl := StrSubstNo(ClientCredentialsTokenAuthorityUrlTxt, AadTenantId);
+        ClearLastError();
+        if (not OAuth2.AcquireTokensFromCache(ClientId, ClientSecret, '', AuthorityUrl, Scopes, AccessToken, IdToken)) or (AccessToken.IsEmpty()) then
+            OAuth2.AcquireTokenWithClientCredentials(ClientId, ClientSecret, AuthorityUrl, '', Scopes, AccessToken);
+
+        IsSuccess := not AccessToken.IsEmpty();
+
+        if not IsSuccess then begin
+            ErrorText := GetLastErrorText();
+            if ErrorText = '' then
+                ErrorText := FailedErr;
+        end;
+
+        exit(IsSuccess);
+    end;
+
     local procedure GetScopes() Scopes: List of [Text]
     begin
-        Scopes.Add('https://microsoft.sharepoint.com/.default');
-        Scopes.Add('https://graph.microsoft.com/.default');
+        Scopes.Add('00000003-0000-0ff1-ce00-000000000000/.default'); //guid is the Application Id for Office 365 SharePoint Online
+        // Scopes.Add('https://microsoft.sharepoint.com/.default');
+        // Scopes.Add('https://graph.microsoft.com/.default');
     end;
 
 }

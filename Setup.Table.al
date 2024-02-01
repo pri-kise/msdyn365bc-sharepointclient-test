@@ -33,6 +33,12 @@ table 50100 "PTE Sharepoint Setup"
             ExtendedDatatype = Masked;
         }
 
+        field(22; "Client Secret"; Text[250])
+        {
+            Caption = 'Client Secret';
+            ExtendedDatatype = Masked;
+        }
+
 
 
         //You might want to add fields here
@@ -79,6 +85,11 @@ table 50100 "PTE Sharepoint Setup"
     internal procedure GetPassword(): SecretText
     begin
         exit(Rec.Password);
+    end;
+
+    internal procedure GetClientSecret(): SecretText
+    begin
+        exit(Rec."Client Secret");
     end;
 
 }
