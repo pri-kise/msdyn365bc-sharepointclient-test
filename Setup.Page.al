@@ -68,6 +68,7 @@ page 50100 "PTE Sharepoint Setup"
                 var
                     PTESharepointTest: Codeunit "PTE Sharepoint Test";
                 begin
+                    Rec.TestField(Password);
                     PTESharepointTest.VerifyCertificate(Rec);
                 end;
             }
@@ -82,6 +83,28 @@ page 50100 "PTE Sharepoint Setup"
                     PTESharepointTest.TestSharepoint();
                 end;
             }
+            action(TestSharepointWithoutPassword)
+            {
+                ApplicationArea = All;
+
+                trigger OnAction()
+                var
+                    PTESharepointTest: Codeunit "PTE Sharepoint Test";
+                begin
+                    PTESharepointTest.TestSharepointWithoutPassword();
+                end;
+            }
+        }
+        area(Promoted)
+        {
+            actionref(UploadCertificate_Promoted; UploadCertificate)
+            { }
+            actionref(VerifyCert_Promoted; VerifyCert)
+            { }
+            actionref(TestSharepoint_Promoted; TestSharepoint)
+            { }
+            actionref(TestSharepointWithoutPassword_Promoted; TestSharepointWithoutPassword)
+            { }
         }
     }
 
