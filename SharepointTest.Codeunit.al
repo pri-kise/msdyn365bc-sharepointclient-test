@@ -153,7 +153,6 @@ codeunit 50100 "PTE Sharepoint Test"
     begin
         Scopes.Add('00000003-0000-0ff1-ce00-000000000000/.default'); //guid is the Application Id for Office 365 SharePoint Online
         // Scopes.Add('https://microsoft.sharepoint.com/.default');
-        // Scopes.Add('https://graph.microsoft.com/.default');
     end;
 
 }
